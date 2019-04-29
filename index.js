@@ -7,6 +7,19 @@ exports.handler = (event, context, callback) => {
     const host = request.headers.host[0].value;
     const path = require("path");
     const parsed_path = path.parse(request.uri);
+    const REPLACEMENTS = [
+        { before: /^\/unblog\/UnBlog\/(\d\d\d\d-\d\d-\d\d).*/,
+          after: "/unblog/post/$1/" }
+    ];
+    let changed = false;
+    let replacementResult = null;
+    for (let replacement of REPLACEMENTS) {
+        replacementResult = request.uri.replace(replacement.before, replacement.after);
+        if (replacementResult != request.uri) { // change made
+            changed = true;
+            break;
+        }
+    }
     if (host != PREFERRED_HOST) {
         const hostResponse = {
             status: "301",
@@ -21,6 +34,20 @@ exports.handler = (event, context, callback) => {
         console.log("Canonicalize host: ", JSON.stringify(request),
                     "Response: ", JSON.stringify(hostResponse));
         callback(null, hostResponse);
+    } else if (changed) {  // REPLACEMENTS match
+        const replacementResponse = {
+            status: "301",
+            statusDescription: "Moved Permanently",
+            headers: {
+                location: [{
+                    key: "Location",
+                    value: "https://" + PREFERRED_HOST + replacementResult
+                }]
+            }
+        };
+        console.log("Replacement: ", JSON.stringify(request),
+                    "Response: ", JSON.stringify(replacementResponse));
+        callback(null, replacementResponse);
     } else if (request.uri.substr(-1) === "/") { // directory request
         // append index.html and continue request
         request.uri += INDEX_DOCUMENT;
