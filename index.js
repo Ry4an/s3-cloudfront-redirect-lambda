@@ -9,7 +9,27 @@ exports.handler = (event, context, callback) => {
     const parsed_path = path.parse(request.uri);
     const REPLACEMENTS = [
         { before: /^\/unblog\/UnBlog\/(\d\d\d\d-\d\d-\d\d).*/,
-          after: "/unblog/post/$1/" }
+          after: "/unblog/post/$1/" },
+        { before: /^\/unblog\/Resume.*/,
+          after: "/unblog/resume/" },
+        { before: /^\/unblog\/InRemembrance.*/,
+          after: "/unblog/inrememberance/" },
+        { before: /^\/unblog\/Ry4anBrase.*/,
+          after: "/unblog/about/" },
+        { before: /^\/unblog\/UnBlog/,
+          after: "/unblog/" },
+        { before: /^\/rss.xml$/,
+          after: "/unblog/atom.atom" },
+        { before: /^\/unblog\/atom\/?$/,
+          after: "/unblog/atom.atom" },
+        { before: /^\/unblog\/rss.xml/,
+          after: "/unblog/atom.atom" },
+        { before: /^\/resume\/?$/,
+          after: "/unblog/resume/" },
+        { before: /^\/resume\/index.html$/,
+          after: "/unblog/resume/" },
+        { before: /^\/resume\/skills-and-chronology.txt/,
+          after: "/unblog/resume/" }
     ];
     let changed = false;
     let replacementResult = null;
