@@ -29,7 +29,15 @@ exports.handler = (event, context, callback) => {
         { before: /^\/resume\/index.html$/,
           after: "/unblog/resume/" },
         { before: /^\/resume\/skills-and-chronology.txt/,
-          after: "/unblog/resume/" }
+          after: "/unblog/resume/" },
+        { before: /^\/pepermail\/unblog.*$/,
+          after: "/unblog/" },
+        { before: /^\/resume.html.*/,
+          after: "/unblog/resume/" },
+        { before: /^\/projects\/?$/,
+          after: "/unblog/" },
+        { before: /^\/home\/.*/,
+          after: "/unblog/" }
     ];
     let changed = false;
     let replacementResult = null;
@@ -68,6 +76,20 @@ exports.handler = (event, context, callback) => {
         console.log("Replacement: ", JSON.stringify(request),
                     "Response: ", JSON.stringify(replacementResponse));
         callback(null, replacementResponse);
+    } else if (request.uri.startsWith("/s/")) { // url shortener
+        const shortnerResponse = {
+            status: "301",
+            statusDescription: "Moved Permanently",
+            headers: {
+                location: [{
+                    key: "Location",
+                    value: "https://short.brase.com/" + request.uri.substring(3)
+                }]
+            }
+        };
+        console.log("URL Shortener: ", JSON.stringify(request),
+                    "Response: ", JSON.stringify(shortnerResponse));
+        callback(null, shortnerResponse);
     } else if (request.uri.substr(-1) === "/") { // directory request
         // append index.html and continue request
         request.uri += INDEX_DOCUMENT;
