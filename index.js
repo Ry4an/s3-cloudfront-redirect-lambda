@@ -83,7 +83,7 @@ exports.handler = (event, context, callback) => {
             headers: {
                 location: [{
                     key: "Location",
-                    value: "https://short.brase.com/" + request.uri.substring(3)
+                    value: "http://short.brase.com/" + request.uri.substring(3)
                 }]
             }
         };
