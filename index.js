@@ -20,6 +20,8 @@ exports.handler = (event, context, callback) => {
           after: "/unblog/" },
         { before: /^\/unblog\/threads.html$/,
           after: "/unblog/" },
+        { before: /^\/RecentChanges$/,
+          after: "/unblog/atom.atom" },
         { before: /^\/rss.xml$/,
           after: "/unblog/atom.atom" },
         { before: /^\/unblog\/atom\/?$/,
