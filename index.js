@@ -3,7 +3,7 @@
 exports.handler = (event, context, callback) => {
     const request = event.Records[0].cf.request;
     const INDEX_DOCUMENT = "index.html";
-    const PREFERRED_HOST = "www.ry4an.org";
+    const PREFERRED_HOST = "ry4an.org";
     const host = request.headers.host[0].value;
     const path = require("path");
     const parsed_path = path.parse(request.uri);
@@ -20,7 +20,7 @@ exports.handler = (event, context, callback) => {
           after: "/unblog/" },
         { before: /^\/unblog\/threads.html$/,
           after: "/unblog/" },
-        { before: /^\/RecentChanges$/,
+        { before: /^\/unblog\/RecentChanges$/,
           after: "/unblog/atom.atom" },
         { before: /^\/rss.xml$/,
           after: "/unblog/atom.atom" },
@@ -50,6 +50,10 @@ exports.handler = (event, context, callback) => {
           after: "/unblog/static/attachments/2004-01-11-Net-Friends-1.00.tar.gz" },
         { before: /^\/home\/?$/,
           after: "/unblog/" },
+        { before: /^\/unblog\/static\/attachments\/2004-07-22-remote-color-bashrc$/,
+          after: "/unblog/static/attachments/2004-07-22-remote-color-bashrc.sh" },
+        { before: /^\/unblog\/static\/attachments\/2003-06-08-savelinks$/,
+          after: "/unblog/static/attachments/2003-06-08-savelinks.sh" },
         { before: /^\/s\//,
           after: "http://short.brase.com/" },
         { before: /^\/262\//,
