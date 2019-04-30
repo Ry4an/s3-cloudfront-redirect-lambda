@@ -16,7 +16,7 @@ exports.handler = (event, context, callback) => {
           after: "/unblog/inrememberance/" },
         { before: /^\/unblog\/Ry4anBrase.*/,
           after: "/unblog/about/" },
-        { before: /^\/unblog\/UnBlog/,
+        { before: /^\/unblog\/UnBlog\/?$/,
           after: "/unblog/" },
         { before: /^\/rss.xml$/,
           after: "/unblog/atom.atom" },
@@ -36,7 +36,7 @@ exports.handler = (event, context, callback) => {
           after: "/unblog/resume/" },
         { before: /^\/projects\/?$/,
           after: "/unblog/" },
-        { before: /^\/home\/.*/,
+        { before: /^\/home\/?$/,
           after: "/unblog/" }
     ];
     let changed = false;
