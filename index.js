@@ -18,6 +18,8 @@ exports.handler = (event, context, callback) => {
           after: "/unblog/about/" },
         { before: /^\/unblog\/UnBlog\/?$/,
           after: "/unblog/" },
+        { before: /^\/unblog\/threads.html$/,
+          after: "/unblog/" },
         { before: /^\/rss.xml$/,
           after: "/unblog/atom.atom" },
         { before: /^\/unblog\/atom\/?$/,
@@ -36,8 +38,20 @@ exports.handler = (event, context, callback) => {
           after: "/unblog/resume/" },
         { before: /^\/projects\/?$/,
           after: "/unblog/" },
+        { before: /^\/surveillance\/.*$/,
+          after: "/unblog/post/mpls-surveillance-shut-down/" },
+        { before: /^\/unblog\/perlmimio-2002-04-21.tar.gz$/,
+          after: "/unblog/post/2003-04-21/" },
+        { before: /^\/unblog\/WikiChump-1.0.tar.gz$/,
+          after: "/unblog/static/attachments/2003-07-14-wikichump.tar.gz" },
+        { before: /^\/unblog\/Net-Friends-1.01.tar.gz$/,
+          after: "/unblog/static/attachments/2004-01-11-Net-Friends-1.00.tar.gz" },
         { before: /^\/home\/?$/,
-          after: "/unblog/" }
+          after: "/unblog/" },
+        { before: /^\/s\//,
+          after: "http://short.brase.com/" },
+        { before: /^\/262\//,
+          after: "http://www.troop262.org/" }
     ];
     let changed = false;
     let replacementResult = null;
@@ -63,33 +77,22 @@ exports.handler = (event, context, callback) => {
                     "Response: ", JSON.stringify(hostResponse));
         callback(null, hostResponse);
     } else if (changed) {  // REPLACEMENTS match
+        if (replacementResult.charAt(0) == "/") {
+            replacementResult = "https://" + PREFERRED_HOST + replacementResult;
+        }
         const replacementResponse = {
             status: "301",
             statusDescription: "Moved Permanently",
             headers: {
                 location: [{
                     key: "Location",
-                    value: "https://" + PREFERRED_HOST + replacementResult
+                    value: replacementResult
                 }]
             }
         };
         console.log("Replacement: ", JSON.stringify(request),
                     "Response: ", JSON.stringify(replacementResponse));
         callback(null, replacementResponse);
-    } else if (request.uri.startsWith("/s/")) { // url shortener
-        const shortnerResponse = {
-            status: "301",
-            statusDescription: "Moved Permanently",
-            headers: {
-                location: [{
-                    key: "Location",
-                    value: "http://short.brase.com/" + request.uri.substring(3)
-                }]
-            }
-        };
-        console.log("URL Shortener: ", JSON.stringify(request),
-                    "Response: ", JSON.stringify(shortnerResponse));
-        callback(null, shortnerResponse);
     } else if (request.uri.substr(-1) === "/") { // directory request
         // append index.html and continue request
         request.uri += INDEX_DOCUMENT;
