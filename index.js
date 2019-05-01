@@ -57,7 +57,19 @@ exports.handler = (event, context, callback) => {
         { before: /^\/s\//,
           after: "http://short.brase.com/" },
         { before: /^\/262\//,
-          after: "http://www.troop262.org/" }
+          after: "http://www.troop262.org/" },
+        { before: /^\/hg\/resume\/rev\//,
+          after: "https://bitbucket.org/Ry4an/resume/commits/" },
+        { before: /^\/hg\/resume.*/,
+          after: "https://bitbucket.org/Ry4an/resume" },
+        { before: /^\/hg\/unblog.*/,
+          after: "https://bitbucket.org/Ry4an/unblog" },
+        { before: /^\/hg\/dotfiles.*/,
+          after: "https://bitbucket.org/Ry4an/dotfiles" },
+        { before: /^\/hg\/ad2kinesis.*/,
+          after: "https://bitbucket.org/Ry4an/ad2kinesis" },
+        { before: /^\/hg\/calendarboard.*/,
+          after: "https://github.com/Ry4an/calendarboard" }
     ];
     let changed = false;
     let replacementResult = null;
